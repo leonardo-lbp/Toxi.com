@@ -1,0 +1,30 @@
+[
+  {
+    "login": "leo2003",
+    "password": "123456",
+    "name": "leo",
+    "email": "l@gmail.com",
+    "follower": []
+  },
+  {
+    "login": "joao2002",
+    "password": "123456",
+    "name": "joao",
+    "email": "j@gmail.com",
+    "follower": []
+  },
+  {
+    "login": "maria2004",
+    "password": "123456",
+    "name": "maria",
+    "email": "m@gmail.com",
+    "follower": []
+  },
+  {
+    "login": "caio2010",
+    "password": "123456",
+    "name": "caio",
+    "email": "c@gmail.com",
+    "follower": []
+  }
+]

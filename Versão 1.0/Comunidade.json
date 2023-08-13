@@ -1,0 +1,58 @@
+[
+  {
+    "name": "grupo a",
+    "description": "o primeiro grupo",
+    "member": [
+      {
+        "username": "leo"
+      }
+    ],
+    "admin": [
+      {
+        "username": "leo"
+      }
+    ]
+  },
+  {
+    "name": "grupo b",
+    "description": "o segundo grupo",
+    "member": [
+      {
+        "username": "joao"
+      }
+    ],
+    "admin": [
+      {
+        "username": "joao"
+      }
+    ]
+  },
+  {
+    "name": "grupo c",
+    "description": "o terceiro grupo",
+    "member": [
+      {
+        "username": "maria"
+      }
+    ],
+    "admin": [
+      {
+        "username": "maria"
+      }
+    ]
+  },
+  {
+    "name": "grupo d",
+    "description": "o quarto grupo",
+    "member": [
+      {
+        "username": "caio"
+      }
+    ],
+    "admin": [
+      {
+        "username": "caio"
+      }
+    ]
+  }
+]
