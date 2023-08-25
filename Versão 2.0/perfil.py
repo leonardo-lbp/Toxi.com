@@ -1,6 +1,6 @@
 from account import *
 from community import *
-
+from data import *
 class Perfil:
     def __init__(self):
         self.accountsList = Account()
@@ -48,5 +48,14 @@ class Perfil:
                 print(f"  - {member['username']}")
         else:
             print("Não achado!!")
-    
-    
+
+users=[data_account()]
+communities = [data_community()]
+
+print()
+print('Pressione A para acessar a seção de contas')
+print('Pressione B para acessar a seção de comunidades')
+print('Pressione C para acessar a seção de perfis')
+print('Pressione X para sair')
+print()
+
