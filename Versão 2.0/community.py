@@ -211,110 +211,112 @@ class Community:
 data_com = data_community()
 users = data_user_whit_community()
 communitys = Community()
-for community in data_com:
-    creator_user = autentic.finduser(community["admin"], users)
-    communitys.create_community(community["name"], community["description"], creator_user)
 
-while True:
-    opc = int(input("1.criar comunidade\n2.editar comunidade\n3.seguir comunidade\n4.deixar de seguir comunidade\n5.deletar comunidade\n6.printar comunidades\n7.sair\n9.moderar a comunidade\n"))
-    #criar
-    if opc == 1:
-        name = input("name: ")
-        #checa se já existe uma comunidade com o mesmo nome
-        if autentic.checkcommunityname(name, communitys.communitys):
-            print("Já existe uma comunidade com este nome")
-            break
-        description = input("descriptio: ")
-        admin = input("admin: ")
-        creator_user = autentic.finduser(admin, users)
-        if creator_user == {}:
-            print("usuario nao encontrado")
-            break
-        communitys.create_community(name, description, creator_user)
+def menu_community():
+    for community in data_com:
+        creator_user = autentic.finduser(community["admin"], users)
+        communitys.create_community(community["name"], community["description"], creator_user)
 
-    #editar
-    if opc == 2:
-        name = input("name: ")
-        communitys.edit_community(name, users)
+    while True:
+        opc = int(input("1.criar comunidade\n2.editar comunidade\n3.seguir comunidade\n4.deixar de seguir comunidade\n5.deletar comunidade\n6.printar comunidades\n7.sair\n9.moderar a comunidade\n"))
+        #criar
+        if opc == 1:
+            name = input("name: ")
+            #checa se já existe uma comunidade com o mesmo nome
+            if autentic.checkcommunityname(name, communitys.communitys):
+                print("Já existe uma comunidade com este nome")
+                break
+            description = input("descriptio: ")
+            admin = input("admin: ")
+            creator_user = autentic.finduser(admin, users)
+            if creator_user == {}:
+                print("usuario nao encontrado")
+                break
+            communitys.create_community(name, description, creator_user)
 
-    #seguir
-    if opc == 3:
-        yourname = input("username: ")
-        userInuserlist = autentic.finduser(yourname, users)
-        if userInuserlist == {}:
-            print("usuario não encontrado")
-            break
-        
-        community_name = input("nome da comunidade: ")
-        community_for_follow = autentic.findcommunity(community_name, communitys.communitys)
-        if community_for_follow == {}:
-            print("comunidade não encontrada")
-            break
+        #editar
+        if opc == 2:
+            name = input("name: ")
+            communitys.edit_community(name, users)
 
-        communitys.followCommunity(userInuserlist, community_for_follow)
+        #seguir
+        if opc == 3:
+            yourname = input("username: ")
+            userInuserlist = autentic.finduser(yourname, users)
+            if userInuserlist == {}:
+                print("usuario não encontrado")
+                break
+            
+            community_name = input("nome da comunidade: ")
+            community_for_follow = autentic.findcommunity(community_name, communitys.communitys)
+            if community_for_follow == {}:
+                print("comunidade não encontrada")
+                break
 
-    #deseguir
-    if opc == 4:
-        yourname = input("username: ")
-        userInuserlist = autentic.finduser(yourname, users)
-        if userInuserlist == {}:
-            print("usuario não encontrado")
-            break
-        
-        community_name = input("nome da comunidade: ")
-        community_for_unfollow = autentic.findcommunity(community_name, communitys.communitys)
-        if community_for_unfollow == {}:
-            print("comunidade não encontrada")
-            break
+            communitys.followCommunity(userInuserlist, community_for_follow)
 
-        userIncommunity = autentic.finduser(yourname, community_for_unfollow["member"])
-        if userIncommunity == {}:
-            print("o usuario não existe na comunidade")
-            break
+        #deseguir
+        if opc == 4:
+            yourname = input("username: ")
+            userInuserlist = autentic.finduser(yourname, users)
+            if userInuserlist == {}:
+                print("usuario não encontrado")
+                break
+            
+            community_name = input("nome da comunidade: ")
+            community_for_unfollow = autentic.findcommunity(community_name, communitys.communitys)
+            if community_for_unfollow == {}:
+                print("comunidade não encontrada")
+                break
 
-
-        communitys.unfollowcommunity(userInuserlist, community_for_unfollow, userIncommunity)
-
-    if opc == 5:
-        community_name = input("nome da comunidade: ")
-        community_delet = autentic.findcommunity(community_name, communitys.communitys)
-        if community_delet == {}:
-            print("comunidade não encontrada")
-            break
+            userIncommunity = autentic.finduser(yourname, community_for_unfollow["member"])
+            if userIncommunity == {}:
+                print("o usuario não existe na comunidade")
+                break
 
 
-        communitys.deletcommunity(users, community_delet)
+            communitys.unfollowcommunity(userInuserlist, community_for_unfollow, userIncommunity)
 
-    #printar comunidade
-    if opc == 6:
-        for community in communitys.communitys:
-            print("Name: " + community["name"])
-            print("Descriptio: " + community["description"])
-            print("Members:")
-            print(community["member"])
-            print("Banned:")
-            print(community["banned"])
+        if opc == 5:
+            community_name = input("nome da comunidade: ")
+            community_delet = autentic.findcommunity(community_name, communitys.communitys)
+            if community_delet == {}:
+                print("comunidade não encontrada")
+                break
 
-    #sair
-    if opc == 7:   
-        break 
 
-    #printar o usuario
-    if opc == 8:
-        for user in users:
-            print("Name: " + user["name"])
-            print("Password: " + user["password"])
-            print("Username: " + user["username"])
-            print("Email: " + user["email"])
-            print("Followers:")
-            print(user["followers"])
-            print("Following:")
-            print(user["following"])
-            print("Communitys: ")
-            print(user["community"])
+            communitys.deletcommunity(users, community_delet)
 
-    #moderar
-    if opc == 9:
-        name = input("name: ")
-        community_name = input("community name: ")
-        communitys.community_moderation(name, community_name, users)
+        #printar comunidade
+        if opc == 6:
+            for community in communitys.communitys:
+                print("Name: " + community["name"])
+                print("Descriptio: " + community["description"])
+                print("Members:")
+                print(community["member"])
+                print("Banned:")
+                print(community["banned"])
+
+        #sair
+        if opc == 7:   
+            break 
+
+        #printar o usuario
+        if opc == 8:
+            for user in users:
+                print("Name: " + user["name"])
+                print("Password: " + user["password"])
+                print("Username: " + user["username"])
+                print("Email: " + user["email"])
+                print("Followers:")
+                print(user["followers"])
+                print("Following:")
+                print(user["following"])
+                print("Communitys: ")
+                print(user["community"])
+
+        #moderar
+        if opc == 9:
+            name = input("name: ")
+            community_name = input("community name: ")
+            communitys.community_moderation(name, community_name, users)

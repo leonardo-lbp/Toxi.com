@@ -161,53 +161,52 @@ class Account:
             #remove seu nome da lista de grupos
             #exclui sua conta
             self.users.remove(you)
-
-
-
+    
 
 
 data_user = data_account()
-users = Account()
-for user in data_user:
-    users.create_account(user["name"], user["password"], user["username"], user["email"])
+users = Account() # observacao: users como acount?
+def menu_account():
+        for user in data_user:
+            users.create_account(user["name"], user["password"], user["username"], user["email"])
 
-while True:
-    opc = int(input("1.criar conta\n2.editar conta\n3.seguir conta\n4.deixar de seguir conta\n5.deletar conta\n6.printar contas\n7.sair\n"))
-    if opc == 1:
-        name = input("name: ")
-        password = input("password: ")
-        username = input("username: ")
-        email = input("email: ")
-        users.create_account(name, password, username, email)
-        
-    if opc == 2:
-        username = input("username: ")
-        users.edit_account(username)
+        while True:
+            opc = int(input("1.criar conta\n2.editar conta\n3.seguir conta\n4.deixar de seguir conta\n5.deletar conta\n6.printar contas\n7.sair\n"))
+            if opc == 1:
+                name = input("name: ")
+                password = input("password: ")
+                username = input("username: ")
+                email = input("email: ")
+                users.create_account(name, password, username, email)
+                
+            if opc == 2:
+                username = input("username: ")
+                users.edit_account(username)
 
-    if opc == 3:
-        youusername = input("youusername: ")
-        friendusername = input("friendusername: ")
-        users.userfollow(youusername, friendusername)
+            if opc == 3:
+                youusername = input("youusername: ")
+                friendusername = input("friendusername: ")
+                users.userfollow(youusername, friendusername)
 
-    if opc == 4:
-        youusername = input("youusername: ")
-        friendusername = input("friendusername: ")
-        users.unfollow(youusername, friendusername)
+            if opc == 4:
+                youusername = input("youusername: ")
+                friendusername = input("friendusername: ")
+                users.unfollow(youusername, friendusername)
 
-    if opc == 5:
-        username = input("username: ")
-        users.delet_account(username)
+            if opc == 5:
+                username = input("username: ")
+                users.delet_account(username)
 
-    if opc == 6:
-        for user in users.users:
-            print("Name: " + user["name"])
-            print("Password: " + user["password"])
-            print("Username: " + user["username"])
-            print("Email: " + user["email"])
-            print("Followers:")
-            print(user["followers"])
-            print("Following:")
-            print(user["following"])
+            if opc == 6:
+                for user in users.users:
+                    print("Name: " + user["name"])
+                    print("Password: " + user["password"])
+                    print("Username: " + user["username"])
+                    print("Email: " + user["email"])
+                    print("Followers:")
+                    print(user["followers"])
+                    print("Following:")
+                    print(user["following"])
 
-    if opc == 7:   
-        break 
+            if opc == 7:   
+                break 

@@ -1,10 +1,11 @@
 from account import *
 from community import *
 from data import *
+
 class Perfil:
     def __init__(self):
-        self.accountsList = Account()
-        self.communityList = Community()
+        self.accountsList = []
+        self.communityList = []
 
     def Account_FollowButton(self, accountIndex, profileName):
         if 0 <= accountIndex < len(self.accountsList):
@@ -59,3 +60,8 @@ print('Pressione C para acessar a seção de perfis')
 print('Pressione X para sair')
 print()
 
+x = input("")
+if x == 'A':
+    menu_account()
+elif x =='B':
+    menu_community()
