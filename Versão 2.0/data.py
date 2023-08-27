@@ -86,7 +86,7 @@ def data_user_whit_community():
             "email": "jose@gmail.com",
             "followers": [],
             "following": [],
-            "community": []
+            "community": [{"name": "amantes do espaco"}]
         },
         {
             "name": "maria",
@@ -95,7 +95,7 @@ def data_user_whit_community():
             "email": "maria@gmail.com",
             "followers": [],
             "following": [],
-            "community": []
+            "community": [{"name": "carros esportivos"}]
         },
         {
             "name": "leo",
@@ -104,7 +104,7 @@ def data_user_whit_community():
             "email": "leozin@gmail.com",
             "followers": [],
             "following": [],
-            "community": []
+            "community": [{"name": "mundo oculto"}]
         },
         {
             "name": "matheus",
@@ -113,7 +113,7 @@ def data_user_whit_community():
             "email": "mat@gmail.com",
             "followers": [],
             "following": [],
-            "community": []
+            "community": [{"name": "Subaqua"}]
         },
         {
             "name": "lua roxa",
@@ -122,7 +122,7 @@ def data_user_whit_community():
             "email": "luaRoxa@gmail.com",
             "followers": [],
             "following": [],
-            "community": []
+            "community": [{"name": "gatos fofinhos"}]
         },
         {
             "name": "maca verde",
@@ -131,8 +131,49 @@ def data_user_whit_community():
             "email": "macaverde@gmail.com",
             "followers": [],
             "following": [],
-            "community": []
+            "community": [{"name": "flor do campo"}]
         }
     ]
 
+    return data_base
+
+def data_community_whit_user():
+    data_base = [
+        {
+            "name": "amantes do espaco",
+            "description": "nos amamos o espaco",
+            "member": [{"username": "jose_l", "access": 0}],
+            "banned": []
+        },
+        {
+            "name": "gatos fofinhos",
+            "description": "veja os gatos mais fofinhos desse app",
+            "member": [{"username": "lua roxa00", "access": 0}],
+            "banned": []
+        },
+        {
+            "name": "carros esportivos",
+            "description": "se voce e amante de carro vai amar essa pagina",
+            "member": [{"username": "maria_l", "access": 0}],
+            "banned": []
+        },
+        {
+            "name": "mundo oculto",
+            "description": "venha para um mundo cheio de misterios",
+            "member": [{"username": "leonardo2004", "access": 0}],
+            "banned": []
+        },
+        {
+            "name": "Subaqua",
+            "description": "embarque nessa jornada e descubra segredos das profundezas dos oceanos",
+            "member": [{"username": "mat", "access": 0}],
+            "banned": []
+        },
+        {
+            "name": "flor do campo",
+            "description": "dicas e muito mais para você cuidar do seu agronegocio",
+            "member": [{"username": "maca verde00", "access": 0}],
+            "banned": []
+        }
+    ]
     return data_base
