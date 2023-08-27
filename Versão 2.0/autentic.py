@@ -63,8 +63,8 @@ class autentic:
         return 0
 
     #realiza o login
-    def login(login, password, checklist):
+    def login(username, password, checklist):
         for checkusername in checklist:
-            if checkusername['username'] == login and checkusername['password'] == password:
+            if checkusername['username'] == username and checkusername['password'] == password:
                 return 1   
         return 0
