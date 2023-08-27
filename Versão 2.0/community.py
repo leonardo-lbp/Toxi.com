@@ -1,5 +1,5 @@
 from autentic import autentic
-from data import data_community
+from data import data_community_whit_user
 from data import data_user_whit_community
 
 class Community:
@@ -22,38 +22,23 @@ class Community:
         new_community_for_user = {"name": name}
         admin["community"].append(new_community_for_user)
 
-
-    #edita a comunidade
-    def edit_community(self, name, userList):
-        #verifica se a comunidade existe
-        youcommunity = autentic.findcommunity(name, self.communitys)
-        if youcommunity == {}:
-            print("comunidade não encontrada!")
-            return
-        
-        select_edit = int(input("Insira o que você quer modificar:\n1.Name\n2.Description\n"))
-
-        #edita o nome da comunidade
-        if select_edit == 1:
-            new_name = input("Novo nome: ")
-            if autentic.checkcommunityname(new_name, self.communitys):
-                print("já existe uma comunidade com este nome!")
-                return
-            
-            #edita o nome na lista de comunidades de cada usuario
-            for user in youcommunity["member"]:
+    
+    #edita o nome da comunidade
+    def edit_name_of_comunity(self, youcommunity, name, new_name, userList):
+        for user in youcommunity["member"]:
                 user_edit = autentic.finduser(user["username"], userList)
                 for community_edit in user_edit["community"]:
                     if community_edit["name"] == name:
                         community_edit["name"] = new_name
                         break
 
-            youcommunity["name"] = new_name
+        youcommunity["name"] = new_name
 
-        #edita a descricao da comunidade
-        if select_edit == 2:
-            new_description = input("Nova descrição: ")
-            youcommunity["description"] = new_description
+
+    #edita a descrição da comunidade
+    def edit_description_of_community(self, new_description, youcommunity):
+        new_description = new_description.capitalize()
+        youcommunity["description"] = new_description
 
 
     #muda o nível de acesso do usuario
@@ -85,87 +70,7 @@ class Community:
             
         #desbane o usuario
         if opc == 2:
-            member_of_community["access"] = 2
             community_moderate["banned"].remove(member_of_community)
-            community_moderate["member"].append(member_of_community)
-
-
-    #faz a moderação da comunidade
-    def community_moderation(self, admin, community, userList):
-        community_moderate = autentic.findcommunity(community, self.communitys)
-        #verifica se a comunidade existe
-        if community_moderate == {}:
-            print("Communidade não encontrada")
-            return
-        
-        admin_user = autentic.finduser(admin, community_moderate["member"])
-        #verifica se o admin existe
-        if admin_user == {}:
-            print("Usuario não encontrado")
-            return
-        
-        #verifica se o usuario é realmente admin da comunidade
-        if admin_user["access"] < 0 or admin_user["access"] > 1:
-            print("Você não é um admin")
-            return
-        
-        select_opc = int(input("O que você deseja fazer:\n1.Modificar o nível de acesso do usuario\n2.Banir usuario\n3.Desbanir usuario\n"))
-
-        #muda o nível de acesso do usuario
-        if select_opc == 1:
-            member_name = input("Insira o nome do membro que você deseja fazer a alteração: ")
-
-            member_of_community = autentic.finduser(member_name, community_moderate["member"])
-            
-            #checa se o membro existe na comunidade
-            if member_of_community == {}:
-                print("Este membro não foi encontrado")
-                return
-            
-            office_select = int(input("Cargos:\n0.criador\n1.Admin\n2.Membro\n"))
-
-            self.change_member_office(admin_user, member_of_community, office_select)
-        
-        #bane um usuario
-        if select_opc == 2:
-            member_name = input("Insira o nome do membro que você deseja fazer a alteração: ")
-
-            member_in_userlist = autentic.finduser(member_name, userList)
-
-            member_of_community = autentic.finduser(member_name, community_moderate["member"])
-            
-            #checa se o membro existe na comunidade
-            if not autentic.checkusername(member_name, community_moderate["member"]):
-                print("Este membro não foi encontrado")
-                return
-            
-            #checa se a comunidade está disponível para o usuario
-            if not autentic.checkcommunityname(community_moderate["name"], member_in_userlist["community"]):
-                print("este membro não está na comunidade")
-                return
-            
-            
-            self.ban_user(admin_user, member_of_community, community_moderate, 1, member_in_userlist)
-
-        #desbane o usuario
-        if select_opc == 3:
-            member_name = input("Insira o nome do membro que você deseja fazer a alteração: ")
-
-            member_in_userlist = autentic.finduser(member_name, userList)
-
-            member_of_community = autentic.finduser(member_name, community_moderate["member"])
-            
-            #checa se o membro existe na comunidade
-            if not autentic.checkusername(member_name, community_moderate["member"]):
-                print("Este membro não foi encontrado")
-                return
-            
-            #checa se a comunidade está disponível para o usuario
-            if not autentic.checkcommunityname(community_moderate["name"], member_in_userlist["community"]):
-                print("este membro não está na comunidade")
-                return
-            
-            self.ban_user(admin_user, member_of_community, community_moderate, 2, member_in_userlist)
 
 
     #segue a comunidadde
@@ -185,13 +90,16 @@ class Community:
         community["member"].remove(delet_member)
         userInuserlist["community"].remove(delet_community)
 
-        if userIncommunity["access"] == 0:
-            for new_creator in community["member"]:
-                if new_creator["access"] < high_access:
-                    new_creator_in_community = new_creator
-                    high_access = new_creator["access"]
-            
-            new_creator_in_community["access"] = 0
+        if len(community["member"]) > 0:
+            if userIncommunity["access"] == 0:
+                for new_creator in community["member"]:
+                    if new_creator["access"] < high_access:
+                        new_creator_in_community = new_creator
+                        high_access = new_creator["access"]
+                
+                new_creator_in_community["access"] = 0
+        else:
+            self.communitys.remove(community)
 
 
     #deleta a conta
@@ -208,115 +116,209 @@ class Community:
 
 
 
-data_com = data_community()
-users = data_user_whit_community()
 communitys = Community()
+users = data_user_whit_community()
+communitys.communitys = data_community_whit_user()
 
-def menu_community():
-    for community in data_com:
-        creator_user = autentic.finduser(community["admin"], users)
-        communitys.create_community(community["name"], community["description"], creator_user)
+while True:
+    opc = int(input("1.criar comunidade\n2.editar comunidade\n3.seguir comunidade\n4.deixar de seguir comunidade\n5.deletar comunidade\n6.printar comunidades\n7.sair\n9.moderar a comunidade\n"))
+    #criar
+    if opc == 1:
+        name = input("name: ")
+        #checa se já existe uma comunidade com o mesmo nome
+        if autentic.checkcommunityname(name, communitys.communitys):
+            print("Já existe uma comunidade com este nome")
+            break
+        description = input("descriptio: ")
+        admin = input("admin: ")
+        creator_user = autentic.finduser(admin, users)
+        if creator_user == {}:
+            print("usuario nao encontrado")
+            break
+        communitys.create_community(name, description, creator_user)
 
-    while True:
-        opc = int(input("1.criar comunidade\n2.editar comunidade\n3.seguir comunidade\n4.deixar de seguir comunidade\n5.deletar comunidade\n6.printar comunidades\n7.sair\n9.moderar a comunidade\n"))
-        #criar
-        if opc == 1:
-            name = input("name: ")
-            #checa se já existe uma comunidade com o mesmo nome
-            if autentic.checkcommunityname(name, communitys.communitys):
-                print("Já existe uma comunidade com este nome")
-                break
-            description = input("descriptio: ")
-            admin = input("admin: ")
-            creator_user = autentic.finduser(admin, users)
-            if creator_user == {}:
-                print("usuario nao encontrado")
-                break
-            communitys.create_community(name, description, creator_user)
+    #editar
+    if opc == 2:
+        name = input("name: ")
+        youcommunity = autentic.findcommunity(name, communitys.communitys)
+        #verifica se a comunidade existe
+        if youcommunity == {}:
+            print("comunidade não encontrada!")
+            break
 
-        #editar
-        if opc == 2:
-            name = input("name: ")
-            communitys.edit_community(name, users)
+        admin_name = input("admin name: ")
+        if autentic.checkaccess(admin_name, youcommunity) < 0 or autentic.checkaccess(admin_name, youcommunity) > 1:
+            print("Você não tem autorização para fazer mudanças na comunidade")
+            break
 
-        #seguir
-        if opc == 3:
-            yourname = input("username: ")
-            userInuserlist = autentic.finduser(yourname, users)
-            if userInuserlist == {}:
-                print("usuario não encontrado")
-                break
-            
-            community_name = input("nome da comunidade: ")
-            community_for_follow = autentic.findcommunity(community_name, communitys.communitys)
-            if community_for_follow == {}:
-                print("comunidade não encontrada")
-                break
+        select_edit = int(input("Insira o que você quer modificar:\n1.Name\n2.Description\n"))
 
-            communitys.followCommunity(userInuserlist, community_for_follow)
-
-        #deseguir
-        if opc == 4:
-            yourname = input("username: ")
-            userInuserlist = autentic.finduser(yourname, users)
-            if userInuserlist == {}:
-                print("usuario não encontrado")
+        #edita o nome da comunidade
+        if select_edit == 1:
+            new_name = input("Novo nome: ")
+            if autentic.checkcommunityname(new_name, communitys.communitys):
+                print("já existe uma comunidade com este nome!")
                 break
             
-            community_name = input("nome da comunidade: ")
-            community_for_unfollow = autentic.findcommunity(community_name, communitys.communitys)
-            if community_for_unfollow == {}:
-                print("comunidade não encontrada")
+            communitys.edit_name_of_comunity(youcommunity, name, new_name, users)
+
+        #edita a descrição da comunidade
+        if select_edit == 2:
+            new_description = input("nova descrição: ")
+            
+            communitys.edit_description_of_community(new_description, youcommunity)
+        
+
+    #seguir
+    if opc == 3:
+        yourname = input("username: ")
+        userInuserlist = autentic.finduser(yourname, users)
+        if userInuserlist == {}:
+            print("usuario não encontrado")
+            break
+        
+        community_name = input("nome da comunidade: ")
+        community_for_follow = autentic.findcommunity(community_name, communitys.communitys)
+        if community_for_follow == {}:
+            print("comunidade não encontrada")
+            break
+
+        communitys.followCommunity(userInuserlist, community_for_follow)
+
+    #deseguir
+    if opc == 4:
+        yourname = input("username: ")
+        userInuserlist = autentic.finduser(yourname, users)
+        if userInuserlist == {}:
+            print("usuario não encontrado")
+            break
+        
+        community_name = input("nome da comunidade: ")
+        community_for_unfollow = autentic.findcommunity(community_name, communitys.communitys)
+        if community_for_unfollow == {}:
+            print("comunidade não encontrada")
+            break
+
+        userIncommunity = autentic.finduser(yourname, community_for_unfollow["member"])
+        if userIncommunity == {}:
+            print("o usuario não existe na comunidade")
+            break
+
+
+        communitys.unfollowcommunity(userInuserlist, community_for_unfollow, userIncommunity)
+
+    if opc == 5:
+        community_name = input("nome da comunidade: ")
+        community_delet = autentic.findcommunity(community_name, communitys.communitys)
+        if community_delet == {}:
+            print("comunidade não encontrada")
+            break
+
+
+        communitys.deletcommunity(users, community_delet)
+
+    #printar comunidade
+    if opc == 6:
+        for community in communitys.communitys:
+            print("Name: " + community["name"])
+            print("Descriptio: " + community["description"])
+            print("Members:")
+            print(community["member"])
+            print("Banned:")
+            print(community["banned"])
+
+    #sair
+    if opc == 7:   
+        break 
+
+    #printar o usuario
+    if opc == 8:
+        for user in users:
+            print("Name: " + user["name"])
+            print("Password: " + user["password"])
+            print("Username: " + user["username"])
+            print("Email: " + user["email"])
+            print("Followers:")
+            print(user["followers"])
+            print("Following:")
+            print(user["following"])
+            print("Communitys: ")
+            print(user["community"])
+
+    #moderar
+    if opc == 9:
+        admin_username = input("admin username: ")
+        #verifica se o usuario existe
+        if not autentic.checkusername(admin_username, users):
+            print("usuario nao encontrado")
+            break
+
+        community_name = input("community name: ")
+        community_moderate = autentic.findcommunity(community_name, communitys.communitys)
+        #verifica se a comunidade existe
+        if community_moderate == {}:
+            print("comunidade não encotrada")
+            break
+
+        admin_in_community = autentic.finduser(admin_username, community_moderate["member"])
+        #verifica se o usuario e membro e se ele tem acesso
+        if admin_in_community == {} or admin_in_community["access"] < 0 or admin_in_community["access"] > 1:
+            print("Acesso inválido")
+            break
+
+        select_opc = int(input("O que você deseja fazer:\n1.Modificar o nível de acesso do usuario\n2.Banir usuario\n3.Desbanir usuario\n"))
+
+        #muda o nível de acesso do usuario
+        if select_opc == 1:
+            member_name = input("Insira o nome do membro que você deseja fazer a alteração: ")
+
+            member_of_community = autentic.finduser(member_name, community_moderate["member"])
+            
+            #checa se o membro existe na comunidade
+            if member_of_community == {}:
+                print("Este membro não foi encontrado")
                 break
+            
+            office_select = int(input("Cargos:\n0.criador\n1.Admin\n2.Membro\n"))
 
-            userIncommunity = autentic.finduser(yourname, community_for_unfollow["member"])
-            if userIncommunity == {}:
-                print("o usuario não existe na comunidade")
+            communitys.change_member_office(admin_in_community, member_of_community, office_select)
+        
+        #bane um usuario
+        if select_opc == 2:
+            member_name = input("Insira o nome do membro que você deseja fazer a alteração: ")
+
+            member_in_userlist = autentic.finduser(member_name, users)
+
+            member_of_community = autentic.finduser(member_name, community_moderate["member"])
+            
+            #checa se o membro existe na comunidade
+            if not autentic.checkusername(member_name, community_moderate["member"]):
+                print("Este membro não foi encontrado")
                 break
-
-
-            communitys.unfollowcommunity(userInuserlist, community_for_unfollow, userIncommunity)
-
-        if opc == 5:
-            community_name = input("nome da comunidade: ")
-            community_delet = autentic.findcommunity(community_name, communitys.communitys)
-            if community_delet == {}:
-                print("comunidade não encontrada")
+            
+            #checa se a comunidade está disponível para o usuario
+            if not autentic.checkcommunityname(community_moderate["name"], member_in_userlist["community"]):
+                print("este membro não está na comunidade")
                 break
+            
+            communitys.ban_user(admin_in_community, member_of_community, community_moderate, 1, member_in_userlist)
 
+        #desbane o usuario
+        if select_opc == 3:
+            member_name = input("Insira o nome do membro que você deseja fazer a alteração: ")
 
-            communitys.deletcommunity(users, community_delet)
+            member_in_userlist = autentic.finduser(member_name, users)
 
-        #printar comunidade
-        if opc == 6:
-            for community in communitys.communitys:
-                print("Name: " + community["name"])
-                print("Descriptio: " + community["description"])
-                print("Members:")
-                print(community["member"])
-                print("Banned:")
-                print(community["banned"])
-
-        #sair
-        if opc == 7:   
-            break 
-
-        #printar o usuario
-        if opc == 8:
-            for user in users:
-                print("Name: " + user["name"])
-                print("Password: " + user["password"])
-                print("Username: " + user["username"])
-                print("Email: " + user["email"])
-                print("Followers:")
-                print(user["followers"])
-                print("Following:")
-                print(user["following"])
-                print("Communitys: ")
-                print(user["community"])
-
-        #moderar
-        if opc == 9:
-            name = input("name: ")
-            community_name = input("community name: ")
-            communitys.community_moderation(name, community_name, users)
+            member_of_community = autentic.finduser(member_name, community_moderate["banned"])
+            
+            #checa se o membro existe na comunidade
+            if not autentic.checkusername(member_name, community_moderate["banned"]):
+                print("Este membro não foi encontrado")
+                break
+            
+            #checa se a comunidade está disponível para o usuario
+            if autentic.checkcommunityname(community_moderate["name"], member_in_userlist["community"]):
+                print("este membro não está banido")
+                break
+            
+            communitys.ban_user(admin_in_community, member_of_community, community_moderate, 2, member_in_userlist)
