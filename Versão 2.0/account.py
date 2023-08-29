@@ -1,6 +1,4 @@
 from autentic import autentic
-from data import data_community_whit_user
-from data import data_user_whit_community
 
 class Account:
     def __init__(self):
