@@ -1,14 +1,15 @@
 from account import Account
 from community import Community
 from autentic import autentic
+from data import Data
 import exception_erros
-from data import data_user_whit_community
-from data import data_community_whit_user
 
 class Profile:
     def __init__(self):
         self.accounts = Account()
         self.communitys= Community()
+        self.user_data = Data("Conta.json")
+        self.community_data = Data("Comunidade.json")
 
 
     #verifica se o campo de name foi preenchido
@@ -138,3 +139,15 @@ class Profile:
     def set_community_description(self, community, new_description):
         new_description = new_description.capitalize()
         self.communitys.edit_description_of_community(new_description, community)
+
+
+    #salva os dados de usuário e de comunidade
+    def save_data(self):
+        self.user_data.save_data(self.accounts.users)
+        self.community_data.save_data(self.communitys.communitys)
+
+
+    #carrega os dados de usuairo e da comunidade
+    def load_data(self):
+        self.accounts.users = self.user_data.load_data()
+        self.communitys.communitys = self.community_data.load_data()
