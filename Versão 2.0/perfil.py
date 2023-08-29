@@ -1,67 +1,140 @@
-from account import *
-from community import *
-from data import *
+from account import Account
+from community import Community
+from autentic import autentic
+import exception_erros
+from data import data_user_whit_community
+from data import data_community_whit_user
 
-class Perfil:
+class Profile:
     def __init__(self):
-        self.accountsList = []
-        self.communityList = []
+        self.accounts = Account()
+        self.communitys= Community()
 
-    def Account_FollowButton(self, accountIndex, profileName):
-        if 0 <= accountIndex < len(self.accountsList):
-            account = self.accountsList[accountIndex]
-            newFollower = {'username': profileName}
-            account['follower'].append(newFollower)
-        else:
-            print("Não achado!!")
 
-    def Account_ShowFollowingAccounts(self, accountIndex):
-        if 0 <= accountIndex < len(self.accountsList):
-            account = self.accountsList[accountIndex]
-            print(f"Seguindo contas ({account['name']}):")
-            for follower in account['follower']:
-                print(f"  - {follower['username']}")
-        else:
-            print("Não achado!!")
+    #verifica se o campo de name foi preenchido
+    def is_a_valid_name(self, name):
+        if len(name) <= 0:
+            raise exception_erros.InvalidUserNameError
 
-    def Account_ShowFollowingCommunities(self, accountIndex):
-        if 0 <= accountIndex < len(self.accountsList):
-            account = self.accountsList[accountIndex]
-            print(f"Seguindo comunidades ({account['name']}):")
-            for follower in account['follower']:
-                print(f"  - {follower['username']}")
-        else:
-            print("Não achado!!")
 
-    def Community_FollowButton(self, communityIndex, profileName):
-        if 0 <= communityIndex < len(self.communityList):
-            community = self.communityList[communityIndex]
-            newMember = {'username': profileName}
-            community['member'].append(newMember)
-        else:
-            print("Não achado!!")
+    #verifica se a senha é valida
+    def is_a_valid_password(self, password):
+        if autentic.checkpassword(password):
+            raise exception_erros.InvalidPasswordError
 
-    def Community_ShowMembers(self, communityIndex):
-        if 0 <= communityIndex < len(self.communityList):
-            community = self.communityList[communityIndex]
-            print(f"Membros da comunidade ({community['name']}):")
-            for member in community['member']:
-                print(f"  - {member['username']}")
-        else:
-            print("Não achado!!")
 
-users=[data_account()]
-communities = [data_community()]
+    #verifica se o email é válido
+    def is_a_valid_email(self, email):
+        if autentic.checkemail(email):
+            raise exception_erros.InvalidEmailError
 
-print()
-print('Pressione A para acessar a seção de contas')
-print('Pressione B para acessar a seção de comunidades')
-print('Pressione C para acessar a seção de perfis')
-print('Pressione X para sair')
-print()
 
-x = input("")
-if x == 'A':
-    menu_account()
-elif x =='B':
-    menu_community()
+    #verifica se o username já existe
+    def username_exist(self, username):
+        if autentic.checkusername(username, self.accounts.users):
+            raise exception_erros.InvalidUsernameErro
+
+
+    #verifica se o name da comunidade já existe
+    def name_exist(self, name):
+        if autentic.checkcommunityname(name, self.communitys.communitys):
+            raise exception_erros.InvalidCommunityNameError
+
+
+    #verifica o acesso do usuairo
+    def acces_verify(self, username, community, access_level):
+        if autentic.checkaccess(username, community) != access_level:
+            raise exception_erros.InvalidAccessUserError
+        
+    
+    #verifica se o usuario foi encontrado
+    def user_is_find(self, user):
+        if user == {}:
+            raise exception_erros.InvalidUserError
+        
+
+    #verifica se a comunidae foi encontrada
+    def community_is_find(self, community):
+        if community == {}:
+            raise exception_erros.InvalidCommunityError
+        
+
+    #pega o usuario pelo nome
+    def get_user(self, username):
+        user = autentic.finduser(username, self.accounts.users)
+        self.user_is_find(user)
+
+        return user
+
+
+    #pega o nome do usuario
+    def get_user_name(self, user):
+        return user["name"]
+
+
+    #insere o nome do usuario
+    def set_user_name(self, user, new_name):
+        self.is_a_valid_name(new_name)
+        self.accounts.edit_account_name(new_name, user)
+
+
+    #pega o username do usuario
+    def get_user_username(self, user):
+        return user['username']
+
+
+    #insere o useraneme do usuario
+    def set_user_username(self, user, new_username):
+        self.username_exist(new_username)
+        self.accounts.edit_account_username(new_username, user, self.communitys.communitys)
+
+
+    #pega a senha do usuario
+    def get_user_password(self, user):
+        return user["password"]
+
+
+    #insere a senha do usuario
+    def set_user_password(self, user, new_password):
+        self.is_a_valid_password(new_password)
+        self.accounts.edit_account_password(new_password, user)
+
+
+    #pega o email do usuario
+    def get_user_email(self, user):
+        return user["email"]
+
+
+    #insere o email do usuario
+    def set_user_email(self, user, new_email):
+        self.is_a_valid_email(new_email)
+        self.accounts.edit_account_email(new_email, user)
+
+
+    #pega a comuniade
+    def get_community(self, community_name):
+        community = autentic.findcommunity(community_name, self.communitys.communitys)
+        self.community_is_find(community)
+
+        return community
+
+
+    #pega o nome da comunidade
+    def get_community_name(self, community):
+        return community["name"]
+
+    #insere o nome da comunidae
+    def set_community_name(self, community, new_name):
+        self.name_exist(new_name)
+        self.communitys.edit_name_of_comunity(community, community["name"], new_name, self.accounts.users)
+
+
+    #pega a descrição da comunidade
+    def get_community_description(self, community):
+        return community["description"]
+
+
+    #insere a descrição da comunidade
+    def set_community_description(self, community, new_description):
+        new_description = new_description.capitalize()
+        self.communitys.edit_description_of_community(new_description, community)
