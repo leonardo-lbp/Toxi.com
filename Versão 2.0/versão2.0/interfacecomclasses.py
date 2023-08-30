@@ -260,7 +260,7 @@ class UserProfileScreen(BaseScreen):
                 [sg.Column([
                 [sg.Button('Editar conta', key='user_edit')],
                 [sg.Button('Deletar conta', key='user_delet')],
-                [sg.Button('Voltar', key='back_btn')] 
+                [sg.Button('Voltar', key='b_btn')] 
                 ], 
                     justification='center',
                     element_justification='c'
@@ -271,17 +271,17 @@ class UserProfileScreen(BaseScreen):
     
             while True:
                 event_popup, values_popup = popup_window.read()
-                if event_popup == sg.WIN_CLOSED or event_popup == 'back_btn':
+                if event_popup == sg.WIN_CLOSED or event_popup == 'b_btn':
                     break
                 elif event_popup == 'user_edit':
                     self.close()
+                    popup_window.close()
                     edit_screen = EditUserScreen(self.profile, self.user)
-                    break
+                    edit_screen.run()
                 elif event_popup == 'user_delet':
                     break
             
             popup_window.close()
-            edit_screen.run()
 
         if event == 'com':
             self.close()
@@ -398,6 +398,90 @@ class EditUserScreen(BaseScreen):
                         popup_window['username'].update('')
                     else:
                         sg.popup("Username editado com sucesso!")
+                        popup_window.close()
+
+                elif event_popup == 'back_btn':
+                    break
+            
+            popup_window.close()
+
+        if event == 'password_edit':
+            layout = [
+                [sg.Column([
+                [sg.Text('Password: ', pad=(8, 8)), sg.InputText(key='password')],
+                [sg.Text(key='wrong_password', size=(60, 1), text_color='Red')],
+                [sg.Button('Editar', key='edit_btn')],
+                [sg.Button('Voltar', key='back_btn')] 
+                ], 
+                    justification='center',
+                    element_justification='c'
+                    )
+                ]
+            ]
+            popup_window = sg.Window('Opções de Configuração', layout)
+    
+            while True:
+                event_popup, values_popup = popup_window.read()
+                if event_popup == sg.WIN_CLOSED or event_popup == 'back_btn':
+                    break
+                elif event_popup == 'edit_btn':
+                    old_password = self.profile.get_user_password(self.user)
+                    new_password = values_popup['password']
+                    popup_window['wrong_password'].update("")
+                    try:
+                        if old_password == new_password:
+                            raise ValueError("O novo username não pode ser igual ao anterior")
+                        self.profile.set_user_password(self.user, new_password)
+                    except exception_erros.InvalidPasswordError:
+                        popup_window['wrong_password'].update('Senha inválida!')
+                        popup_window['password'].update('')
+                    except ValueError:
+                        popup_window['wrong_password'].update('A nova senha não pode ser igual ao anterior!')
+                        popup_window['password'].update('')
+                    else:
+                        sg.popup("Password editada com sucesso!")
+                        popup_window.close()
+
+                elif event_popup == 'back_btn':
+                    break
+            
+            popup_window.close()
+
+        if event == 'email_edit':
+            layout = [
+                [sg.Column([
+                [sg.Text('Email: ', pad=(8, 8)), sg.InputText(key='email')],
+                [sg.Text(key='wrong_email', size=(60, 1), text_color='Red')],
+                [sg.Button('Editar', key='edit_btn')],
+                [sg.Button('Voltar', key='back_btn')] 
+                ], 
+                    justification='center',
+                    element_justification='c'
+                    )
+                ]
+            ]
+            popup_window = sg.Window('Opções de Configuração', layout)
+    
+            while True:
+                event_popup, values_popup = popup_window.read()
+                if event_popup == sg.WIN_CLOSED or event_popup == 'back_btn':
+                    break
+                elif event_popup == 'edit_btn':
+                    old_email = self.profile.get_user_email(self.user)
+                    new_email = values_popup['email']
+                    popup_window['wrong_email'].update("")
+                    try:
+                        if old_email == new_email:
+                            raise ValueError("O novo username não pode ser igual ao anterior")
+                        self.profile.set_user_email(self.user, new_email)
+                    except exception_erros.InvalidEmailError:
+                        popup_window['wrong_email'].update('Email inválido!')
+                        popup_window['email'].update('')
+                    except ValueError:
+                        popup_window['wrong_email'].update('O novo email não pode ser igual ao anterior!')
+                        popup_window['email'].update('')
+                    else:
+                        sg.popup("email editado com sucesso!")
                         popup_window.close()
 
                 elif event_popup == 'back_btn':
