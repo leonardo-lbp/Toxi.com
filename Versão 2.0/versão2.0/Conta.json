@@ -1,0 +1,105 @@
+[
+    {
+        "name": "jose",
+        "password": "Mm@1234",
+        "username": "jose_l",
+        "email": "jose@gmail.com",
+        "followers": [],
+        "following": [],
+        "community": [
+            {
+                "name": "amantes do espaco"
+            }
+        ]
+    },
+    {
+        "name": "maria",
+        "password": "Mm@1234",
+        "username": "maria_l",
+        "email": "maria@gmail.com",
+        "followers": [],
+        "following": [],
+        "community": [
+            {
+                "name": "carros esportivos"
+            }
+        ]
+    },
+    {
+        "name": "leo",
+        "password": "@leo14M",
+        "username": "leonardo2004",
+        "email": "leozin@gmail.com",
+        "followers": [
+            {
+                "username": "mats"
+            }
+        ],
+        "following": [
+            {
+                "username": "mats"
+            }
+        ],
+        "community": [
+            {
+                "name": "mundo oculto"
+            }
+        ]
+    },
+    {
+        "name": "matheus",
+        "password": "@Mt1405",
+        "username": "mats",
+        "email": "mat@gmail.com",
+        "followers": [
+            {
+                "username": "leonardo2004"
+            }
+        ],
+        "following": [
+            {
+                "username": "leonardo2004"
+            }
+        ],
+        "community": [
+            {
+                "name": "Subaqua"
+            }
+        ]
+    },
+    {
+        "name": "lua roxa",
+        "password": "Pacoca@14",
+        "username": "lua roxa00",
+        "email": "luaRoxa@gmail.com",
+        "followers": [],
+        "following": [],
+        "community": [
+            {
+                "name": "gatos fofinhos"
+            }
+        ]
+    },
+    {
+        "name": "maca verde",
+        "password": "macaVerde045@",
+        "username": "maca verde00",
+        "email": "macaverde@gmail.com",
+        "followers": [],
+        "following": [],
+        "community": [
+            {
+                "name": "flor do campo"
+            }
+        ]
+    },
+    {
+        "name": "a",
+        "password": "@Mt1405",
+        "username": "b",
+        "email": "a@gmail.com",
+        "followers": [],
+        "following": [],
+        "community": []
+    }
+]
