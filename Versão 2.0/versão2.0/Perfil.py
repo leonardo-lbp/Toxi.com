@@ -1,15 +1,15 @@
 from account import Account
 from community import Community
 from autentic import autentic
-from data import Data
+import data
 import exception_erros
 
 class Profile:
     def __init__(self):
         self.accounts = Account()
         self.communitys= Community()
-        self.user_data = Data("Conta.json")
-        self.community_data = Data("Comunidade.json")
+        self.user_data = data.userdata()
+        self.community_data = data.communiytdata()
 
 
     #Verifica o login
@@ -70,6 +70,12 @@ class Profile:
     def community_is_find(self, community):
         if community == {}:
             raise exception_erros.InvalidCommunityError
+        
+    
+    #verufica se os dados foram carregados com sucesso
+    def data_verify(self, data_to_verify):
+        if data_to_verify == []:
+            raise exception_erros.InvalidDataError
         
 
     #pega o usuario pelo nome
@@ -153,13 +159,26 @@ class Profile:
         self.communitys.edit_description_of_community(new_description, community)
 
 
+    #salva os dados
+    def set_data(self):
+        self.save_data(self.user_data, self.accounts.users)
+        self.save_data(self.community_data, self.communitys.communitys)
+
+
     #salva os dados de usuário e de comunidade
-    def save_data(self):
-        self.user_data.save_data(self.accounts.users)
-        self.community_data.save_data(self.communitys.communitys)
+    def save_data(self, data, data_to_save):
+        data.save_data(data_to_save)
+        
+
+    #pega os dados
+    def get_data(self):
+        self.accounts.users = self.load(self.user_data)
+        self.communitys.communitys = self.load(self.community_data)
 
 
     #carrega os dados de usuairo e da comunidade
-    def load_data(self):
-        self.accounts.users = self.user_data.load_data()
-        self.communitys.communitys = self.community_data.load_data()
+    def load(self, data):
+        loaded_data = data.load_data()
+        self.data_verify(loaded_data)
+        return loaded_data
+
