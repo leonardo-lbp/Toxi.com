@@ -47,3 +47,8 @@ class InvaldLoginError(NameError):
 class InvalidUsernameError2(ValueError):
     def __init__(self, message="Username não preenchido"):
         super().__init__(message)
+
+#classe de erro de dados
+class InvalidDataError(NameError):
+    def __init__(self, message="Dados não encontrados"):
+        super().__init__(message)
